@@ -17,6 +17,12 @@ import (
 
 func main() {
 
+	// Init Logger
+
+	logger.InitLogger()
+
+	defer logger.Log.Sync()
+
 	logger.Log.Info(
 		"starting auth worker",
 	)

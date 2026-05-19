@@ -3,7 +3,7 @@ package middleware
 import (
 	"time"
 
-	"catalog-service/internal/logger"
+	"auth-service/internal/logger"
 
 	"github.com/gofiber/fiber/v2"
 	"go.uber.org/zap"

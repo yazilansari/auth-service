@@ -4,37 +4,43 @@ import (
 	authMiddleware "auth-service/internal/auth/middleware"
 	authRoutes "auth-service/internal/auth/routes"
 	"auth-service/internal/database"
+	"auth-service/internal/logger"
+	requestMiddleware "auth-service/internal/middleware"
 	"auth-service/internal/queue"
 	redisClient "auth-service/internal/redis"
 
-	"log"
 	"os"
 
 	"github.com/gofiber/fiber/v2"
 
 	fiberCors "github.com/gofiber/fiber/v2/middleware/cors"
-	fiberLogger "github.com/gofiber/fiber/v2/middleware/logger"
 	fiberRecover "github.com/gofiber/fiber/v2/middleware/recover"
-	fiberRequestID "github.com/gofiber/fiber/v2/middleware/requestid"
 
 	"github.com/joho/godotenv"
+	"go.uber.org/zap"
 )
 
 func main() {
+
+	// Init Logger
+
+	logger.InitLogger()
+
+	defer logger.Log.Sync()
 
 	// Load ENV
 
 	err := godotenv.Load()
 
 	if err != nil {
-		log.Fatal(".env file not loaded")
+		logger.Log.Fatal(".env file not loaded")
 	}
 
 	// Connect PostgreSQL
 
 	database.ConnectPostgres()
 
-	log.Println("✅ PostgreSQL Connected")
+	logger.Log.Info("✅ PostgreSQL Connected")
 
 	// Connect Redis
 
@@ -44,7 +50,7 @@ func main() {
 
 	queue.InitQueue()
 
-	log.Println("✅ Redis Connected")
+	logger.Log.Info("✅ Redis Connected")
 
 	// Fiber App
 
@@ -62,11 +68,9 @@ func main() {
 
 	// Request ID
 
-	app.Use(fiberRequestID.New())
+	app.Use(requestMiddleware.RequestContextMiddleware())
 
-	// Logger
-
-	app.Use(fiberLogger.New())
+	app.Use(requestMiddleware.RequestLoggerMiddleware())
 
 	// CORS
 
@@ -108,7 +112,11 @@ func main() {
 		port = "8080"
 	}
 
-	log.Println("🚀 Auth Service Running On Port:", port)
+	logger.Log.Info("🚀 Auth Service Running",
+		zap.String("port", port),
+	)
 
-	log.Fatal(app.Listen(":" + port))
+	logger.Log.Fatal("server stopped",
+		zap.Error(app.Listen(":"+port)),
+	)
 }

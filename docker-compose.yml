@@ -4,6 +4,7 @@ services:
   auth-service:
     build: .
     container_name: auth-service
+    restart: always
     command: ./server
     ports:
       - "8080:8080"
@@ -15,6 +16,7 @@ services:
   auth-worker:
     build: .
     container_name: sms-whatsapp-worker
+    restart: always
     command: ./worker
     env_file:
       - .env

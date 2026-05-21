@@ -6,7 +6,7 @@ COPY . .
 
 RUN go build -o server ./cmd/server
 
-RUN go build -o worker ./cmd/worker
+# RUN go build -o worker ./cmd/worker
 
 # =========================
 
@@ -15,7 +15,7 @@ FROM alpine:latest
 WORKDIR /app
 
 COPY --from=builder /app/server .
-COPY --from=builder /app/worker .
+# COPY --from=builder /app/worker .
 
 COPY .env .
 

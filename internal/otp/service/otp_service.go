@@ -1,8 +1,8 @@
 package service
 
 import (
+	"auth-service/internal/kafka"
 	"auth-service/internal/logger"
-	"auth-service/internal/queue"
 	"auth-service/internal/redis"
 
 	"fmt"
@@ -153,7 +153,12 @@ func SaveOTP(phone string, otp string) error {
 
 	queueStart := time.Now()
 
-	err = queue.EnqueueOTP(
+	err = kafka.PublishOTPEvent(
+		phone,
+		otp,
+	)
+
+	err = kafka.PublishWhatsAppEvent(
 		phone,
 		otp,
 	)

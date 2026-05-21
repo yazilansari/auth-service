@@ -13,15 +13,15 @@ services:
     networks:
       - ecommerce-network
 
-  auth-worker:
-    build: .
-    container_name: sms-whatsapp-worker
-    restart: always
-    command: ./worker
-    env_file:
-      - .env
-    networks:
-      - ecommerce-network
+  # auth-worker:
+  #   build: .
+  #   container_name: sms-whatsapp-worker
+  #   restart: always
+  #   command: ./worker
+  #   env_file:
+  #     - .env
+  #   networks:
+  #     - ecommerce-network
 
 networks:
   ecommerce-network:

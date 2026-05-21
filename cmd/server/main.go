@@ -4,6 +4,7 @@ import (
 	authMiddleware "auth-service/internal/auth/middleware"
 	authRoutes "auth-service/internal/auth/routes"
 	"auth-service/internal/database"
+	"auth-service/internal/kafka"
 	"auth-service/internal/logger"
 	requestMiddleware "auth-service/internal/middleware"
 	"auth-service/internal/queue"
@@ -51,6 +52,10 @@ func main() {
 	queue.InitQueue()
 
 	logger.Log.Info("✅ Redis Connected")
+
+	kafka.InitKafkaProducer()
+
+	logger.Log.Info("✅ kafka producer Connected")
 
 	// Fiber App
 

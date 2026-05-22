@@ -6,11 +6,11 @@ type OTPPayload struct {
 	OTP string `json:"otp"`
 }
 
-type WhatsAppPayload struct {
-	Phone string `json:"phone"`
+// type WhatsAppPayload struct {
+// 	Phone string `json:"phone"`
 
-	OTP string `json:"otp"`
-}
+// 	OTP string `json:"otp"`
+// }
 
 type EmailPayload struct {
 	To string `json:"to"`

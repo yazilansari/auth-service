@@ -8,6 +8,7 @@ import (
 
 	"auth-service/internal/logger"
 
+	"github.com/segmentio/kafka-go"
 	kafkaGo "github.com/segmentio/kafka-go"
 
 	"go.uber.org/zap"
@@ -15,7 +16,7 @@ import (
 
 var OTPWriter *kafkaGo.Writer
 
-var WhatsAppWriter *kafkaGo.Writer
+// var WhatsAppWriter *kafkaGo.Writer
 
 var EmailWriter *kafkaGo.Writer
 
@@ -33,27 +34,49 @@ func InitKafkaProducer() {
 		Topic: OTPTopic,
 
 		Balancer: &kafkaGo.LeastBytes{},
+
+		Async: true,
+
+		BatchTimeout: 1 * time.Millisecond,
+
+		BatchSize: 1,
+
+		RequiredAcks: kafka.RequireOne,
+
+		Compression: kafka.Snappy,
 	}
 
-	WhatsAppWriter = &kafkaGo.Writer{
-		Addr: kafkaGo.TCP(
-			os.Getenv("KAFKA_BROKER"),
-		),
+	// WhatsAppWriter = &kafkaGo.Writer{
+	// 	Addr: kafkaGo.TCP(
+	// 		os.Getenv("KAFKA_BROKER"),
+	// 	),
 
-		Topic: WhatsAppTopic,
+	// 	Topic: WhatsAppTopic,
 
-		Balancer: &kafkaGo.LeastBytes{},
-	}
+	// 	Balancer: &kafkaGo.LeastBytes{},
 
-	EmailWriter = &kafkaGo.Writer{
-		Addr: kafkaGo.TCP(
-			os.Getenv("KAFKA_BROKER"),
-		),
+	// 	Async: true,
 
-		Topic: EmailTopic,
+	// 	BatchTimeout: 10 * time.Millisecond,
 
-		Balancer: &kafkaGo.LeastBytes{},
-	}
+	// 	RequiredAcks: kafka.RequireOne,
+	// }
+
+	// EmailWriter = &kafkaGo.Writer{
+	// 	Addr: kafkaGo.TCP(
+	// 		os.Getenv("KAFKA_BROKER"),
+	// 	),
+
+	// 	Topic: EmailTopic,
+
+	// 	Balancer: &kafkaGo.LeastBytes{},
+
+	// 	Async: true,
+
+	// 	BatchTimeout: 10 * time.Millisecond,
+
+	// 	RequiredAcks: kafka.RequireOne,
+	// }
 
 	logger.Log.Info(
 		"kafka producers initialized",
@@ -64,7 +87,7 @@ func InitKafkaProducer() {
 // OTP PRODUCER
 // =========================
 
-func PublishOTPEvent(
+func PublishOTPCreatedEvent(
 	phone string,
 	otp string,
 ) error {
@@ -85,22 +108,22 @@ func PublishOTPEvent(
 // WHATSAPP PRODUCER
 // =========================
 
-func PublishWhatsAppEvent(
-	phone string,
-	otp string,
-) error {
+// func PublishWhatsAppEvent(
+// 	phone string,
+// 	otp string,
+// ) error {
 
-	payload := WhatsAppPayload{
-		Phone: phone,
-		OTP:   otp,
-	}
+// 	payload := WhatsAppPayload{
+// 		Phone: phone,
+// 		OTP:   otp,
+// 	}
 
-	return publish(
-		WhatsAppWriter,
-		phone,
-		payload,
-	)
-}
+// 	return publish(
+// 		WhatsAppWriter,
+// 		phone,
+// 		payload,
+// 	)
+// }
 
 // =========================
 // EMAIL PRODUCER

@@ -153,15 +153,22 @@ func SaveOTP(phone string, otp string) error {
 
 	queueStart := time.Now()
 
-	err = kafka.PublishOTPEvent(
+	err = kafka.PublishOTPCreatedEvent(
 		phone,
 		otp,
 	)
 
-	err = kafka.PublishWhatsAppEvent(
-		phone,
-		otp,
-	)
+	if err != nil {
+		logger.Log.Error(
+			"failed to publish otp event",
+			zap.Error(err),
+		)
+	}
+
+	// go kafka.PublishWhatsAppEvent(
+	// 	phone,
+	// 	otp,
+	// )
 
 	queueDuration := time.Since(queueStart)
 

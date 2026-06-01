@@ -23,7 +23,7 @@ func InitFiberStorage() {
 	// =========================
 
 	db, err := strconv.Atoi(
-		os.Getenv("REDIS_RATE_LIMIT_DB"),
+		os.Getenv("REDIS_DB"),
 	)
 
 	if err != nil {
@@ -33,7 +33,7 @@ func InitFiberStorage() {
 
 			zap.String(
 				"redis_db",
-				os.Getenv("REDIS_RATE_LIMIT_DB"),
+				os.Getenv("REDIS_DB"),
 			),
 
 			zap.Error(err),

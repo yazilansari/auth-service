@@ -32,7 +32,7 @@ func main() {
 	// =========================
 
 	db, err := strconv.Atoi(
-		os.Getenv("REDIS_QUEUE_DB"),
+		os.Getenv("REDIS_DB"),
 	)
 
 	if err != nil {
@@ -42,7 +42,7 @@ func main() {
 
 			zap.String(
 				"redis_db",
-				os.Getenv("REDIS_QUEUE_DB"),
+				os.Getenv("REDIS_DB"),
 			),
 
 			zap.Error(err),

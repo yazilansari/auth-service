@@ -24,7 +24,7 @@ func ConnectRedis() {
 	// =========================
 
 	db, err := strconv.Atoi(
-		os.Getenv("REDIS_OTP_DB"),
+		os.Getenv("REDIS_DB"),
 	)
 
 	if err != nil {
@@ -34,7 +34,7 @@ func ConnectRedis() {
 
 			zap.String(
 				"redis_db",
-				os.Getenv("REDIS_OTP_DB"),
+				os.Getenv("REDIS_DB"),
 			),
 
 			zap.Error(err),

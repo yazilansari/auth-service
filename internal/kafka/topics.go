@@ -3,7 +3,7 @@ package kafka
 const (
 
 	// OTP
-	OTPTopic = "otp.created"
+	OTPTopic = "otp.send"
 
 	// WhatsApp
 	// WhatsAppTopic = "whatsapp.send"
